@@ -1,0 +1,34 @@
+﻿<table class="table table-striped table-condensed table-bordered">
+    <tr>
+        <th class="text-center">Наименование</th>
+        <th class="text-center">Изображения</th>
+        <th class="text-center"></th>
+    </tr>
+
+    @foreach (var g in ViewBag.Images)
+    {
+        int id = g.Id;
+        string name = g.Name;
+        byte[] data = g.Data;
+        <tr>
+            <td class="text-center" style="padding-top:2.5%">
+             @Html.ActionLink(name, "EditImage", "Admin", new { id = id }, null)
+            </td>
+            <td class="text-center">
+                @Html.Raw("<img style='width:100px; height:80px;' src=\"data:image/jpeg;base64,"
+                                + Convert.ToBase64String(data) + "\" />")
+            </td>
+            <td class="text-center" style="padding-top:2.5%">
+                @using (Html.BeginForm("DeleteImage", "Admin"))
+                {
+                    @Html.Hidden("imageId", id)
+                    <input type="submit" class="btn btn-danger btn-xs" value="Удалить" />
+                }
+            </td>
+        </tr>
+
+    }
+</table>
+
+@Html.ActionLink("Добавить", "CreateImage", null, new { @class = "btn btn-default" })
+

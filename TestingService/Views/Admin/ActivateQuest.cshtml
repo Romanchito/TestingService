@@ -1,0 +1,40 @@
+﻿@{
+    ViewBag.Title = "ActivateQuest";
+}
+
+@if (ViewBag.Quest.Active)
+{
+    <h1 style="color:#00ad19">Задание @ViewBag.Quest.Name запущено</h1>
+    
+
+}
+
+else
+{
+    <h1 style="color:#b20000">Задание @ViewBag.Quest.Name остановлено</h1>  
+}
+
+
+@if (ViewBag.User.RoleId == 1)
+{
+
+    <div>
+        @Html.ActionLink("Назад", "AdminPanel", new
+   {
+       @class = "btn btn-danger"
+   })
+
+    </div>
+}
+
+else
+{
+    <div>
+        @Html.ActionLink("Назад", "TeacherPanel", "Teacher", null ,new
+   {
+            @class = "btn btn-danger"
+   })
+     
+
+    </div>
+}

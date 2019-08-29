@@ -1,0 +1,203 @@
+﻿@model IEnumerable<TestingService.Models.ViewModels.ViewResultModel>
+@{ 
+    string mark = "1";
+    if(ViewBag.Mark != "" || ViewBag.Mark != null)
+    {
+        mark = ViewBag.Mark;
+    }
+}
+<script>
+
+    var button = document.getElementById("search");
+    var clear_button = document.getElementById("clear");
+    button.onclick = showTable;
+    clear_button.onclick = clearValues;
+
+    $( function() {
+        $( "#inputDate1" ).datepicker({dateFormat: "dd.mm.yy"});
+        $( "#inputDate2" ).datepicker({dateFormat: "dd.mm.yy"});;
+
+    } );
+
+    function clearValues(){
+        var group = document.getElementById("inputGroup").options[0].selected = true;
+        var date1 = document.getElementById("inputDate1").value = "";
+        var date2 = document.getElementById("inputDate2").value = "";
+        var mark = document.getElementById("inputMark").options[0].selected = true;
+        showTable();
+    }
+
+    function showTable() {
+        var group = document.getElementById("inputGroup").value;
+        var date1 = document.getElementById("inputDate1").value;
+        var date2 = document.getElementById("inputDate2").value;
+        var mark = document.getElementById("inputMark").value;
+       $.ajax({
+           url: '@Url.Action("ResultsData", "Teacher")',
+           data: {questId : @ViewBag.QuestId , group : group , dateFirst : date1, dateSecond : date2 , mark : mark } ,
+            cache: false,
+            success: function (html) {
+                $("#searchResult").html(html);
+            }
+        });
+    }
+
+    function show() {
+        if(document.getElementById("inputGroup").options.selectedIndex == 0 && document.getElementById("inputMark").options.selectedIndex == 0
+            && document.getElementById("inputDate1").value == "" && document.getElementById("inputDate2").value == "" ){
+            $('#results').load('@Url.Action("ResultsData", "Teacher", new { questId = ViewBag.questId })');
+        }
+    }
+
+    $(document).ready(function () {       
+        setInterval('show()',45000);
+    });
+
+</script>
+
+
+<div id="searchResult">
+
+    <div style="margin-top:2%; padding-left:10%;">
+
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <select id="inputGroup" class="form-control" >
+                    <option value="" selected>Группы</option>
+                    @foreach (var item in ViewBag.Groups)
+                    {
+                        <option>@item</option>
+                    }                    
+                </select>
+            </div>
+            <div class="form-group col-md-2">                    
+               <input type="text" class="form-control" placeholder="Начальная дата" id="inputDate1" value="@ViewBag.DateFirst">
+            </div>
+            <div class="form-group col-md-2">
+                <input type="text" class="form-control" placeholder="Конечная дата" id="inputDate2" value="@ViewBag.DateSecond">
+            </div>
+
+            @if (ViewBag.Type == "Опрос")
+            {
+                <div hidden class="form-group col-md-2">
+                    <select id="inputMark" class="form-control">
+                        <option value="" selected>Оценки</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                    </select>
+                </div>
+            }
+            else
+            {
+                <div  class="form-group col-md-2">
+                    <select id="inputMark" class="form-control">
+                        <option value="" selected>Оценки</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                    </select>
+                </div>
+            }
+
+
+            <div class="form-group col-md-1">
+                <input id="search" type="submit" class="btn btn-primary" value="Поиск" />
+            </div>
+            <div class="form-group col-md-1">
+                <input id="clear" type="submit" class="btn btn-danger" value="Очистить" />
+            </div>
+        </div> 
+        </div>
+        <div>
+
+
+@if (ViewBag.Type != "Опрос")
+{
+        <table class="table table-striped table-condensed table-bordered">
+            <tr>
+                <th class="text-center">ФИО</th>
+                <th class="text-center">Группа</th>
+                <th class="text-center">Вопросы</th> 
+                <th class="text-center">Дата</th>
+                <th class="text-center">%</th>
+                <th class="text-center">Оценка</th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                var user = ViewBag.UserService.GetById(item.UserId);
+                var quest = ViewBag.QuestService.GetById(item.QuestId);
+                string statistic = item.GetCountOfTrueAnswers() + "/" + item.Answers.Count();
+                string fullName = user.Surname + " " + user.Name + " " + user.Patronomic;
+                <tr>
+                    <td class="text-center">@user.Surname @user.Name @user.Patronomic</td>
+                    @if (user.Group != null)
+                    {
+                        <td class="text-center">@user.Group.Name</td>
+                    }
+                    else
+                    {
+                        <td class="text-center">none</td>
+                    }                    
+                    <td class="text-center">
+                        @Html.ActionLink(statistic, "ShowResultOfUser", "Teacher", new
+                   {
+                       resultId = item.Id,
+                       questId = item.QuestId,
+                       userFullName = fullName
+                   }, new { target = "_blank" })
+                    </td>
+                    <td class="text-center">@item.Date</td>
+                    <td class="text-center">@item.Percente</td>
+                    <td class="text-center">@item.Mark</td>
+                </tr>
+            }
+        </table>
+
+}
+else
+{
+    <table class="table table-striped table-condensed table-bordered">
+        <tr>
+            <th class="text-center">ФИО</th>
+            <th class="text-center">Группа</th>
+            <th class="text-center">Вопросы</th>
+            <th class="text-center">Дата</th>           
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            var user = ViewBag.UserService.GetById(item.UserId);
+            var quest = ViewBag.QuestService.GetById(item.QuestId);
+            string statistic = item.GetCountOfTrueAnswers() + "/" + item.Answers.Count();
+            string fullName = user.Surname + " " + user.Name + " " + user.Patronomic;
+            <tr>
+                <td class="text-center">@user.Surname @user.Name @user.Patronomic</td>
+                @if (user.Group != null)
+                    {
+                    <td class="text-center">@user.Group.Name</td>
+                }
+                else
+                {
+                    <td class="text-center">-</td>
+                }
+                <td class="text-center">
+                    @Html.ActionLink(statistic, "ShowResultOfUser", "Teacher", new
+                   {
+                       resultId = item.Id,
+                       questId = item.QuestId,
+                       userFullName = fullName
+                   },  new { target = "_blank" })
+                </td>
+                <td class="text-center">@item.Date</td>                
+            </tr>
+        }
+    </table>
+}
+    </div>
+</div>
+
+

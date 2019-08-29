@@ -1,0 +1,56 @@
+﻿@{
+    ViewBag.Title = "ShowResultOfUser";
+
+}
+
+<h1>Результат пользователя @ViewBag.UserFullName</h1>
+<table class="table table-striped table-condensed table-bordered">
+    <tr>
+        <th class="text-center">Вопрос</th>
+        <th class="text-center">Ответ</th>
+    </tr>
+
+    @for (int i = 0; i < ViewBag.Length; i++)
+    {
+        //if (ViewBag.Questions[i].EntryType != "Множественный")
+        //{
+            <tr>
+                <td class="text-center">@ViewBag.Questions[i].Text_of_question</td>
+                @if (ViewBag.Result[i].isTrue)
+                {
+                    <td class="text-center" style="background-color:forestgreen;color:whitesmoke">@ViewBag.Result[i].Text_of_answer</td>
+                }
+                else
+                {
+                    <td class="text-center" style="background-color:darkred;color:whitesmoke">@ViewBag.Result[i].Text_of_answer</td>
+                }
+            </tr>
+        
+
+        @*else
+        {
+            string[] truAnswers = new string[ViewBag.Questions[i].Answers.Count()];
+            int index = 0;
+            foreach (var item in ViewBag.Questions[index].Answers)
+            {
+                if (item.isTrue)
+                {
+                    truAnswers[index] = item.Text_of_answer;
+                }
+                index++;
+            }
+            <tr>
+                <td class="text-center">@ViewBag.Questions[i].Text_of_question</td>
+                @if (ViewBag.Result[i].isTrue)
+                {
+                    <td class="text-center" style="background-color:forestgreen">@ViewBag.Result[i].Text_of_answer</td>
+                }
+                else
+                {
+                    <td class="text-center" style="background-color:darkred">@ViewBag.Result[i].Text_of_answer</td>
+                }
+            </tr>
+        }*@
+
+    }
+</table>

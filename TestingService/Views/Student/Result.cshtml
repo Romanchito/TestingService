@@ -1,0 +1,70 @@
+﻿@model TestingService.Models.ViewModels.ViewResultModel
+
+@{
+    ViewBag.Title = "Result";
+    int i = 1;
+}
+
+<h2>Ваш результат</h2>
+
+<table class="table table-striped table-condensed table-bordered">
+    <tr>
+        @foreach (var item in Model.Answers)
+        {
+            if (item.isTrue)
+            {
+                <th class="text-center" style="background-color:forestgreen">@i</th>
+            }
+            else
+            {
+                <th class="text-center" style="background-color:brown">@i</th>
+            }
+            i++;
+        }
+    </tr>
+</table>
+
+<div>   
+    <hr />
+    <dl class="dl-horizontal" style="font-size: 20px">
+       
+
+        <dt>
+            @Html.DisplayName("Оценка")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Mark)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Процент")
+        </dt>
+
+        @if (Model.Mark == 5 || Model.Mark == 4)
+        {
+            <dd style="color:green">
+               @Html.DisplayFor(model => model.Percente)%
+            </dd>
+        }
+
+        else
+        {
+            if (Model.Mark == 3)
+            {
+                <dd style="color:darkorange">
+                    @Html.DisplayFor(model => model.Percente)%
+                </dd>
+            }
+            else
+            {
+                <dd style="color:red">
+                    @Html.DisplayFor(model => model.Percente)%
+                </dd>
+            }
+        }
+</dl>
+</div>
+<p>
+    @Html.ActionLink("Вернуться", "StudentPanel")    
+</p>

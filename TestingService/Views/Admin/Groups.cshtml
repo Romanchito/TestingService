@@ -1,0 +1,25 @@
+﻿<table class="table table-striped table-condensed table-bordered">
+    <tr>        
+        <th class="text-center">Название</th>
+        <th class="text-center"></th>
+    </tr>
+
+    @foreach (var g in ViewBag.Groups)
+    {
+        int id = g.Id;
+        string name = g.Name;
+        <tr>            
+            <td class="text-center">@Html.ActionLink(name, "EditGroup", "Admin", new { groupId = id }, null)</td>
+            <td class="text-center">
+                @using (Html.BeginForm("DeleteGroup", "Admin"))
+                {
+                    @Html.Hidden("groupId", id)
+                    <input type="submit" class="btn btn-danger btn-xs" value="Удалить" />
+                }
+            </td>
+        </tr>
+
+    }
+</table>
+
+@Html.ActionLink("Добавить", "CreateGroup", null, new { @class = "btn btn-default" })

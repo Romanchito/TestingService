@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/css/select2.css" rel="stylesheet" />  
+    <link href="~/Content/css/accountStyles.css" rel="stylesheet" />     
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">   
+    <script src="~/Scripts/modernizr-2.6.2.js"></script>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    <script src="~/Scripts/jquery-1.10.2.js"></script>  
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/select2.min.js"></script>    
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                @Html.ActionLink("Tester", "Main", "Home", new { area = "" }, new { @class = "navbar-brand" })               
+                <form class="Rbutton">
+                    @{ if (User.Identity.IsAuthenticated)
+                        {
+                            if (User.IsInRole("student"))
+                            {
+                                <button class="btn R">@Html.ActionLink("Выйти", "Logout", "Account")</button>
+                                <h7 class="txtColor"> @Html.ActionLink(User.Identity.Name, "StudentPanel", "Student") </h7>
+                            }
+                            if (User.IsInRole("teacher"))
+                            {
+                                <button class="btn R">@Html.ActionLink("Выйти", "Logout", "Account")</button>
+                                <h7 class="txtColor"> @Html.ActionLink(User.Identity.Name, "TeacherPanel", "Teacher") </h7>
+                            }
+                            if (User.IsInRole("admin"))
+                            {
+                                <button class="btn R">@Html.ActionLink("Выйти", "Logout", "Account")</button>
+                                <h7 class="txtColor"> @Html.ActionLink(User.Identity.Name, "AdminPanel", "Admin") </h7>
+                            }
+                        }
+                        else
+                        {
+                            <button class="btn R">@Html.ActionLink("Вход", "Login", "Account")</button>
+                            <button class="btn R">@Html.ActionLink("Регистрация", "Register", "Account")</button>
+                        }
+                    }
+                </form>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="container body-content">
+        @if (TempData["message"] != null)
+        {
+            <div class="alert alert-success">@TempData["message"]</div>
+        }
+        @RenderBody()
+        
+        <footer>
+           
+        </footer>
+    </div>
+
+   
+    @RenderSection("Script", required: false)
+</body>                                        
+</html>

@@ -1,0 +1,54 @@
+﻿@model IEnumerable<TestingService.Models.ViewModels.ViewQuestionModel>
+
+@{ 
+    int idQuest = ViewBag.IdQuest;
+}
+<table class="table table-striped table-condensed table-bordered">
+    <tr>
+        <th class="text-center">Вопрос</th>       
+        <th class="text-center">Ответы</th>
+        <th class="text-center"></th>
+    </tr>
+    
+    @foreach (var u in Model)
+    {
+        int id = u.Id;
+        string text = u.Text_of_question;
+        string type = ViewBag.QuestType;
+        <tr>
+            <td class="text-center">@Html.ActionLink(text, "EditQuestion", "Admin", new { questionId = id }, null)</td>            
+            <td class="text-center">
+                @if (ViewBag.QuestType != "Опрос" )
+                {
+                    using (Ajax.BeginForm("Answers", new { questionId = id, questType = type }, new AjaxOptions { UpdateTargetId = "results" }))
+                    {
+                        <input type="submit" class="btn btn-success" value="Ответы" />
+
+                    }
+                }
+                else
+                {
+                    if (u.EntryType != "Ввод")
+                    {
+                        using (Ajax.BeginForm("Answers", new { questionId = id, questType = type }, new AjaxOptions { UpdateTargetId = "results" }))
+                        {
+                            <input type="submit" class="btn btn-success" value="Ответы" />
+
+                        }
+                    }
+                }
+
+            </td>
+            <td class="text-center">
+                @using (Html.BeginForm("DeleteQuestion", "Admin"))
+                {
+                    @Html.Hidden("questionId", id)
+                    <input type="submit" class="btn btn-danger btn-xs" value="Удалить" />
+                }
+            </td>
+        </tr>
+
+    }
+</table>
+
+@Html.ActionLink("Добавить", "CreateQuestion", new { questId = idQuest }, new { @class = "btn btn-default" })

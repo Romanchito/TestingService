@@ -1,0 +1,12 @@
+﻿<script>
+    function show() {
+        $('#quests').load('@Url.Action("TableOfQuests", "Student", new { group = ViewBag.Info})');
+    }
+
+    $(document).ready(function () {
+        show();
+        setInterval('show()', 3000);
+    });
+</script>
+<div id="quests">
+</div>

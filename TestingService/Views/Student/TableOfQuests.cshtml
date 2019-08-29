@@ -1,0 +1,36 @@
+﻿@model IEnumerable<TestingService.Models.ViewModels.ViewQuestModel>
+    
+<h2>Контрольные материалы</h2>
+<table class="table table-striped table-condensed table-bordered">
+    <tr>
+        <th>Название</th>
+        <th>Тип</th>
+    </tr>
+
+    @foreach (var g in Model)
+    {
+        if (!g.LogicDelete)
+        {
+            int id = g.Id;
+            string name = g.Name;
+            string type = g.Type;
+        <tr>
+            @if (g.Active)
+            {
+                <td class="text-center">
+                    @Html.ActionLink(name, "DoingQuest", "Student", new { questId = id, typeQuest = type }, null)
+                </td>
+            }
+
+            else
+            {
+                <td class="text-center">
+                    @name
+                </td>
+            }
+
+            <td>@g.Type</td>
+        </tr>
+        }
+    }
+</table>

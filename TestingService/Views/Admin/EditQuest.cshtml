@@ -1,0 +1,173 @@
+﻿@model TestingService.Models.ViewModels.ViewQuestModel
+
+@{
+    ViewBag.Title = "Контрольный материал";
+    List<SelectListItem> items = ViewBag.Teachers;
+    List<SelectListItem> items2 = ViewBag.Groups;
+}
+
+@using (Html.BeginForm("EditQuest", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h2>Контрольный материал</h2>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.Label("Наименование", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div id="Percent">
+            <div class="form-group">
+                @Html.Label("Оценка '5'", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Percent_Of_Exelent, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Percent_Of_Exelent, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.Label("Оценка '4'", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Percent_Of_Good, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Percent_Of_Good, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.Label("Оценка '3'", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Percent_Of_Satisfactory, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Percent_Of_Satisfactory, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+           @Html.Label("Тип", htmlAttributes: new { @class = "control-label col-md-2" })
+           
+                <div class="col-md-10">
+                    <select class="form-control" id="Type" name="Type"  oninput="changer(this.selectedIndex)">
+                        @if (Model != null)
+                            {
+                            if (Model.Type != null)
+                            {
+                                if (Model.Type.Equals("Опрос"))
+                                {
+                                    <option value="Тест">Тест</option>
+                                    <option selected="selected" value="Опрос">Опрос</option>
+                                }
+                                else
+                                {
+                                    <option selected="selected"value="Тест">Тест</option>
+                                    <option value="Опрос">Опрос</option>
+                                }
+                            }
+                            else
+                            {
+                                <option selected="selected" value="Тест">Тест</option>
+                                <option value="Опрос">Опрос</option>
+                            }
+                        }
+                        else
+                        {
+                            <option selected="selected" value="Тест">Тест</option>
+                                <option value="Опрос">Опрос</option>
+                        }
+                    </select>
+                </div>
+            
+        </div>
+
+       
+            <div class="form-group">
+                @Html.Label("Группа", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.GroupId, items2, new { @class = "form-control" })
+
+                    @Html.ValidationMessageFor(model => model.GroupId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+       
+
+        @if (ViewBag.User.RoleId == 1)
+        {
+            <div class="form-group">
+                @Html.Label("Преподаватель", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.TeacherId, items, new { @class = "form-control" })
+
+                    @Html.ValidationMessageFor(model => model.TeacherId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        }
+
+        else
+        {
+            <div class="form-group">
+                @Html.LabelFor(model => model.TeacherId, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.TeacherId, new[] {
+                            new SelectListItem() { Text = ViewBag.User.Surname + " " + ViewBag.User.Name
+                                                   + " " + ViewBag.User.Patronomic , Value = ViewBag.User.Id + ""
+                                                   , Selected=true },
+
+                        }, new { @class = "form-control" })
+                </div>
+            </div>
+        }
+
+        <div hidden class="form-group">
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Id, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+        </div>
+
+        <input type="checkbox" name="Active" value="true" hidden />
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Создать" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+@if (ViewBag.User.RoleId == 1)
+{
+
+<div>
+   @Html.ActionLink("Назад", "AdminPanel", new { result = "quests" }, new
+{
+    @class = "btn btn-danger"
+})
+
+</div>
+}
+
+else
+{
+    @Html.ActionLink("Назад", "TeacherPanel", "Teacher", new { result = "quests" }, new
+{
+    @class = "btn btn-danger"
+})
+}
+
+<script>
+
+        var groups = document.getElementById("GroupId");
+        function changer(str) {
+            if (str == 0) {
+                document.getElementById('Percent').setAttribute('style', 'display:block');
+            }
+            else {
+                document.getElementById('Percent').setAttribute('style', 'display:none');
+            }
+        }
+</script>
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

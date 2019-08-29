@@ -1,0 +1,66 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+A {
+    color: whitesmoke;
+    text-decoration:none !important;
+   }
+
+A:hover { 
+    color: #bd2b2b;
+    transition:0.6s;    
+   }
+
+A:active{
+    color:#dccc1d;
+} 
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+.navbar-header {
+    width:118%;
+    max-width:1800px;      
+}
+
+.navbar-default{
+    background:#555555;
+    border-color:#555555;
+}
+
+.navbar-default .navbar-brand {
+    color: WhiteSmoke;
+}
+
+.navbar-default .navbar-brand:hover{
+    color: #bd2b2b;
+}
+
+
+.Rbutton{
+    
+    float:left;
+    margin-top:0.5%;
+    margin-left:60%;
+}
+
+.R{
+    background-color:rgba(0, 0, 0, 0.00);
+}
+
+.txtColor{
+    color:#e5ce18;
+    margin-left:10px;        
+}

@@ -1,0 +1,100 @@
+﻿@{
+    ViewBag.Title = "EditQuest";
+
+}
+<style>
+
+     .slider{
+         height:100%;
+         background-color: silver;
+    }
+
+    .about_function{
+
+         background-color: darkblue;
+    }
+
+    .about_box{
+        width:250px;
+        background-color:burlywood;
+    }
+
+    .about_box_img{
+        width:200px;
+        background-color:forestgreen;
+    }
+
+    .about_box_text{
+        width:230px;
+        background-color:sandybrown
+    }
+
+    .statistic{
+
+         background-color: darkred;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        h = $('#teacherInfo').height();
+        $('#studentInfo').height(h);
+    });
+</script>
+<hr class="featurette-divider">
+<div class="container marketing" style="margin-top:2%">      
+        <div class="row">
+            <div id="teacherInfo" class="col-lg-4" style="margin-left:14%;background-color:#0089ff;border-radius:5px;padding:15px 15px 15px 15px;color:whitesmoke">
+                <img class="img-circle" src="~/Content/images/HomeImage4.png"style="margin-left:20%;" width="200" height="200" alt="Generic placeholder image">
+                <h2>Преподаватель</h2>
+                <p>В роли преподавателя пользователь может создавать контрольные материалы, 
+                для существующих образовательных групп, гибко настраивать их, а также просматривать статистические данные результатов прохождения.</p>
+               
+            </div>
+            <div id="studentInfo" class="col-lg-4" style="margin-left:5%;background-color:#0089ff;border-radius:5px;padding:15px 15px 15px 15px;color:whitesmoke">
+                <img class="img-circle" src="~/Content/images/HomeImage5.png" style="margin-left:20%;" width="200" height="200" alt="Generic placeholder image">
+                <h2>Ученик</h2>
+                <p>Благодаря информационной системе, ученик может решать назанченные ему тестовые задания и проходить опросы.</p>
+             </div>      
+        </div>
+
+        <hr class="featurette-divider">
+
+        <div class="row featurette">
+            <div class="col-md-7">
+                <h2 class="featurette-heading">Гибкое управление контрольными материалами </h2>
+                <p class="lead">В конструкторе предусмотрен ряд различных настроек элементов тестирования. Вы можете быстро и удобно создать действительно уникальный тест.</p>
+            </div>
+            <div class="col-md-5">
+                <img class="featurette-image img-responsive" src="~/Content/images/HomeImage1.png" width="300" height="300" alt="Generic placeholder image">
+            </div>
+        </div>
+
+        <hr class="featurette-divider">
+
+        <div class="row featurette">
+            <div class="col-md-5" style="padding-left:8%">
+                <img class="featurette-image img-responsive" src="~/Content/images/HomeImage3.png" width="250" height="250" alt="Generic placeholder image">
+            </div>
+            <div class="col-md-7">
+                <h2 class="featurette-heading">Различные виды тестирований</h2>
+                <p class="lead">Помимо обычных тестирований для контроля знаний, в качестве преподавателя пользователь способен создавать опросы любой тематики</p>
+            </div>
+        </div>
+
+        <hr class="featurette-divider">
+
+        <div class="row featurette">
+            <div class="col-md-7">
+                <h2 class="featurette-heading">Удобный инструмент статистики</h2>
+                <p class="lead">
+                    В роли преподавателя вам доступен просмотр каждого результата, статистики ответов и набранных баллов по каждому тесту, статистики по каждому результату.
+                    В табличном виде представлены все результаты, регистрационные параметры, ответы на все вопросы
+                </p>
+            </div>
+            <div class="col-md-5">
+                <img class="featurette-image img-responsive" src="~/Content/images/HomeImage2.png" width="300" height="300" alt="Generic placeholder image">
+            </div>
+        </div>
+
+       </div>
+

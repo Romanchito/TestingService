@@ -1,0 +1,25 @@
+﻿@model IEnumerable<TestingService.Models.ViewModels.ViewQuestModel>
+
+<table class="table table-striped table-condensed table-bordered">
+    <tr>
+        <th class="text-center">Название</th>
+        <th class="text-center">Тип</th>        
+        <th class="text-center"></th>
+    </tr>
+
+    @foreach (var u in Model)
+    {
+        if (u.LogicDelete)
+        {
+            int id = u.Id;
+            int? IdOfGroup = u.GroupId;
+            string name = u.Name;
+            <tr>
+                <td class="text-center">@name</td>
+                <td class="text-center">@u.Type</td>               
+                <td class="text-center"> @Html.ActionLink("результаты", "ShowResultsOfQuest", "Teacher", new { questId = id }, null)</td>
+            </tr>
+        }
+    }
+</table>
+

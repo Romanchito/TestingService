@@ -1,0 +1,143 @@
+﻿@model TestingService.Models.ViewModels.ViewQuestionModel
+
+@{
+    int param = 0;
+    ViewBag.Title = "EditQuestion";
+}
+
+@using (Html.BeginForm("EditQuestion", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>Вопрос</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+             @Html.Label("Текст вопроса", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Text_of_question, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Text_of_question, "", new { @class = "text-danger" })
+            </div>
+        </div>       
+
+        <div hidden class="form-group">
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.QuestId, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+        </div>
+
+        <div hidden class="form-group">
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Id, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Тип вопроса", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.EntryType, new[] {
+                            new SelectListItem() { Text = "Выбор", Value = "Выбор" , Selected=true },
+                            new SelectListItem() { Text = "Ввод", Value = "Ввод"},
+                            new SelectListItem() { Text = "Множественный", Value = "Множественный"}
+                         }, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Изображение", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+
+                <select class="form-control" id="ImageId" name="ImageId" onchange="selecter()">
+                
+                @foreach (var item in ViewBag.Images)
+                {        
+                           
+                        if (Model!= null && Model.ImageId != null && Model.ImageId == item.Id)
+                        {
+                            <option selected="selected" value="@item.Id"> @item.Name </option>
+                        param = 1;
+                    }
+                    else
+                    {                       
+                        <option value="@item.Id"> @item.Name </option>
+                    }
+                }
+                    @if (param == 0)
+                    {
+                        <option selected="selected" value=""> Отсутствует </option>
+                    }
+                    else
+                    {
+                        <option value=""> Отсутствует </option>
+                    }
+
+                 </select>
+               
+            </div>
+        </div>
+           <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Создать" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+
+        <div id="resultImage" style="width:200px;height:200px; margin-left:6.5%;">
+
+        </div>
+}
+
+
+@if (ViewBag.User.RoleId == 1)
+{
+
+    <div style="margin-top:1%">
+        @Html.ActionLink("Назад", "AdminPanel", new { result = "questions", questType = ViewBag.QuestType, id = ViewBag.Id }, new
+{
+    @class = "btn btn-danger"
+})
+
+    </div>
+}
+
+else
+{
+    <div style="margin-top:1%">
+        @Html.ActionLink("Назад", "TeacherPanel", "Teacher", new { result = "questions", questType = ViewBag.QuestType, id = ViewBag.Id }, new
+   {
+       @class = "btn btn-danger"
+   })
+
+    </div>
+}
+
+<script>
+    selecter();
+    function selecter() {
+        var seletedValue = document.getElementById("ImageId").value;
+        var seletedDiv = document.getElementById("resultImage")
+        console.log(seletedValue);
+
+        if (seletedValue != 0) {
+            seletedDiv.style.display = 'block';
+            $.ajax({
+                url: '@Url.Action("ShowImage", "Admin")',
+                cache: false,
+                data: { imageId: seletedValue },
+                success: function (html) {
+                    $("#resultImage").html(html);
+                }
+            });
+        }
+        else {
+            seletedDiv.style.display = 'none';
+        }
+    }
+
+
+</script>
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

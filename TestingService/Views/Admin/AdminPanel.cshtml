@@ -1,0 +1,116 @@
+﻿@{
+    ViewBag.Title = "AdminPanel";
+}
+
+<script>
+    function show(flag , type , id) {
+        if (flag == "groups") {
+            $.ajax({
+                url: '@Url.Action("Groups", "Admin")',
+                cache: false,
+                success: function (html) {
+                    $("#results").html(html);
+                }
+            });
+        }
+
+        if (flag == "images") {
+            $.ajax({
+                url: '@Url.Action("Images", "Admin")',
+                cache: false,
+                success: function (html) {
+                    $("#results").html(html);
+                }
+            });
+        }
+
+        if (flag == "quests") {
+            $.ajax({
+                url: '@Url.Action("Quests", "Admin")',
+                cache: false,
+                success: function (html) {
+                    $("#results").html(html);
+                }
+            });
+        }
+
+        if (flag == "users") {
+            $.ajax({
+                url: '@Url.Action("Users", "Admin")',
+                cache: false,
+                success: function (html) {
+                    $("#results").html(html);
+                }
+            });
+        }
+
+        if (flag == "questions") {
+            $.ajax({
+                url: '@Url.Action("Questions", "Admin" , new { questId = ViewBag.Id , questType = ViewBag.Quest_Type })',
+                cache: false,
+                success: function (html) {
+                    $("#results").html(html);
+                }
+            });
+        }
+
+        if (flag == "answers") {
+            $.ajax({
+                url: '@Url.Action("Answers", "Admin" , new { questionId = ViewBag.Id , questType = ViewBag.Quest_Type })',
+                cache: false,
+                success: function (html) {
+                    $("#results").html(html);
+                }
+            });
+        }
+    }
+
+    $(document).ready(function () {
+        show('@ViewBag.Result', '@ViewBag.Quest_Type' , @ViewBag.Id);
+    });
+</script>
+
+<h2>Панель Администратора</h2>
+
+<div>
+    <div style="width:100%; height:1px; clear:both;"></div>
+    @using (Ajax.BeginForm("Groups", new AjaxOptions { UpdateTargetId = "results", LoadingElementId = "loading" }))
+    {
+        <div class="line_block">
+            <input type="submit" class="btn btn-default" value="Группы" />
+        </div>
+
+    }
+
+    @using (Ajax.BeginForm("Images", new AjaxOptions { UpdateTargetId = "results", LoadingElementId = "loading" }))
+    {
+        <div class="line_block">
+            <input type="submit" class="btn btn-default" value="Изображения" />
+        </div>
+    }
+
+    @using (Ajax.BeginForm("Users", new AjaxOptions { UpdateTargetId = "results", LoadingElementId = "loading" }))
+    {
+        <div class="line_block">
+            <input type="submit" class="btn btn-default" value="Пользователи" />
+        </div>
+
+    }
+
+    @using (Ajax.BeginForm("Quests", new AjaxOptions { UpdateTargetId = "results", LoadingElementId = "loading" }))
+    {
+        <div class="line_block">
+            <input type="submit" class="btn btn-default" value="Контрольные материалы" />
+        </div>
+    }
+
+   
+
+    <div style="width:100%; height:1px; clear:both;"></div>
+    <div id="results">
+    </div>
+
+    <img id="loading" src="@Url.Content("~/Content/images/gif/45.gif")" style="display:none" />
+
+    <link href="~/Content/admin_panel.css" rel="stylesheet" type="text/css" />
+</div>

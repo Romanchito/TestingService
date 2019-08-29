@@ -1,0 +1,48 @@
+﻿<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
+<link href="~/Content/Statistic.css" rel="stylesheet" />
+
+
+    <h4 style="margin-top:1%">Статистика вопроса: @ViewBag.Question</h4>
+    <div class="statistic_grafic">
+        <canvas id="popChart1" width="300" height="100" />
+    </div>
+
+
+<script>   
+    var button2 = document.getElementById("HardQuestions")
+
+    
+    var barChart = null;
+    function showEasyQuestions1() {
+        var popCanvas = document.getElementById("popChart1").getContext("2d");
+        var questions =@Html.Raw(Json.Encode(ViewBag.Answers));
+        var status =@Html.Raw(Json.Encode(ViewBag.Status));
+         barChart = new Chart(popCanvas, {
+            type: 'bar',
+            data: {
+                labels: questions,
+                datasets: [{
+                    label: 'Отвечено',
+                    data: status,
+                    backgroundColor:
+                      '#0089ff'
+                }]
+            },
+             options: {
+                 scales: {
+                     yAxes: [{
+                         display: true,
+                         ticks: {
+                             beginAtZero: true
+                         }
+                     }]
+                 }
+             }
+         });
+
+
+    }
+    $( document ).ready(function() {
+        showEasyQuestions1();
+    });
+</script>

@@ -1,0 +1,184 @@
+﻿@model IEnumerable<TestingService.Models.ViewModels.ViewResultModel>
+@{
+    ViewBag.Title = "ShowResultsOfQuest";
+    int i = 0;
+}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
+<link href="~/Content/Statistic.css" rel="stylesheet" />
+
+@if (ViewBag.Type == "Тест")
+{
+    <nav class="navbar navbar-light bg-light" style="margin-left: 37% ">
+        <form class="form-inline">
+            <button class="btn btn-primary" id="Marks" type="button">Оценки</button>
+            <button class="btn btn-primary" id="HardQuestions" type="button">Сложные вопросы</button>
+            <button class="btn btn-primary" id="EasyQuestions" type="button">Легкие вопросы</button>
+        </form>
+    </nav>
+
+    <div class="statistic_grafic">
+        <canvas id="popChart1" width="300" height="100" />
+    </div>
+}
+
+@if (ViewBag.Type == "Опрос")
+{
+    <div >
+        <nav class="navbar navbar-light bg-light" style="margin-top:5%;margin-left:35%">
+            <form class="form-inline">
+                <select class="form-control" id="index" name="index" oninput="changer(this.selectedIndex)">
+                    @foreach (var item in ViewBag.Questions)
+                {
+                    if (i == 0)
+                    {
+                            <option selected="selected" value="@i">@item.Text_of_question</option>
+                            i++;
+                        }
+                        else
+                        {
+                            <option value="@i">@item.Text_of_question</option>
+                            i++;
+                        }
+                    }
+                </select>
+                <button class="btn btn-primary" id="Statistic" type="button">Статистика</button>
+            </form>
+        </nav>
+    </div>
+    <div id="statistic"></div>
+
+}
+
+<h3>Результаты</h3>
+
+<div id="results"></div>
+@if (ViewBag.Type == "Тест")
+{
+    <script>
+    var button1 = document.getElementById("Marks")
+    var button2 = document.getElementById("HardQuestions")
+    var button3 = document.getElementById("EasyQuestions")
+
+    button1.onclick = showMarks;
+    button2.onclick = showHardQuestions;
+    button3.onclick = showEasyQuestions;
+    var barChart = null;
+    $('#results').load('@Url.Action("ResultsData", "Teacher", new { questId = ViewBag.questId })');
+
+    function show() {
+
+        $('#results').load('@Url.Action("ResultsData", "Teacher", new { questId = ViewBag.questId })');
+    }
+
+    function showMarks() {
+        var popCanvas = document.getElementById("popChart1").getContext("2d");
+        if(barChart != null){
+            barChart.destroy();
+        }
+
+         barChart = new Chart(popCanvas, {
+            type: 'pie',
+            data: {
+                labels: ["Оценка 5", "Оценка 4", "Оценка 3", "Оценка 2"],
+                datasets: [{
+                    label: 'Оценки',
+                    data: [@ViewBag.CountOf_5, @ViewBag.CountOf_4, @ViewBag.CountOf_3,  @ViewBag.CountOf_2],
+                    backgroundColor: [
+                      'rgba(23, 209, 11, 0.6)',
+                      'rgba(204, 234, 37, 0.6)',
+                      'rgba(234, 192, 37, 0.6)',
+                      'rgba(199, 64, 64, 0.6)'
+                    ]
+                }]
+            }
+        });
+    }
+
+    function showHardQuestions() {
+        var popCanvas = document.getElementById("popChart1").getContext("2d");
+        var questions =@Html.Raw(Json.Encode(ViewBag.FalseQuestions));
+        var status =@Html.Raw(Json.Encode(ViewBag.FalseStatus));
+        if(barChart != null){
+            barChart.destroy();
+        }
+        barChart = new Chart(popCanvas, {
+            type: 'bar',
+            data: {
+                labels: questions,
+                datasets: [{
+                    label: 'Неверно отвечено(%)',
+                    data: status,
+                    backgroundColor:
+                      'rgba(179, 26, 26,1)'
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        display: true,
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    }
+
+    function showEasyQuestions() {
+        var popCanvas = document.getElementById("popChart1").getContext("2d");
+        var questions =@Html.Raw(Json.Encode(ViewBag.TrueQuestions));
+        var status =@Html.Raw(Json.Encode(ViewBag.TrueStatus));
+        if(barChart != null){
+            barChart.destroy();
+        }
+        barChart = new Chart(popCanvas, {
+            type: 'bar',
+            data: {
+                labels: questions,
+                datasets: [{
+                    label: 'Верно отвечено(%)',
+                    data: status,
+                    backgroundColor:
+                      'rgba(31, 167, 86, 1)'
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        display: true,
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    }
+    </script>
+}
+
+@if (ViewBag.Type == "Опрос")
+{
+    <script>
+        var button1 = document.getElementById("Statistic");
+        button1.onclick = showStat;
+        var value = 0;
+        function changer(arg) {
+            value = arg;
+        }
+        function showStat(){
+            $.ajax({
+                url: '@Url.Action("ResultStaticOpros", "Teacher")',
+                cache: false,
+                data: {questId: @ViewBag.questId, position: value},
+                success: function (html) {
+                    $("#statistic").html(html);
+                }
+            });
+
+        }
+
+        $('#results').load('@Url.Action("ResultsData", "Teacher", new { questId = ViewBag.questId })');
+    </script>
+}

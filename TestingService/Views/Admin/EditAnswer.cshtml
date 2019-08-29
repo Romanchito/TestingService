@@ -1,0 +1,92 @@
+﻿@model TestingService.Models.ViewModels.ViewAnswerModel
+
+@{
+    ViewBag.Title = "EditAnswer";
+}
+
+@using (Html.BeginForm("EditAnswer", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        @if (ViewBag.QuestionName != null)
+        {
+            <h4>@ViewBag.QuestionName</h4>
+        }
+        else
+        {
+            <h4>Вопрос</h4>
+        }
+
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        @if (ViewBag.QuestType != "Опрос" && ViewBag.EnteryType != "Ввод")
+        {
+            <div class="form-group">
+                @Html.Label("Правильность", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.CheckBoxFor(model => model.isTrue)
+                    @Html.ValidationMessageFor(model => model.isTrue, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        }
+
+        else
+        {
+            <input type="checkbox" name="isTrue" value="true" hidden checked/>
+        }
+
+        <div class="form-group">
+            @Html.Label("Текст ответа", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Text_of_answer, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Text_of_answer, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div hidden class="form-group">
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.QuestionId, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+        </div>       
+
+        <div hidden class="form-group">
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Id, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Создать" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+
+
+@if (ViewBag.User.RoleId == 1)
+{
+
+    <div>
+        @Html.ActionLink("Назад", "AdminPanel", new { result = "answers", questType = ViewBag.QuestType, id = ViewBag.Id }, new
+{
+    @class = "btn btn-danger"
+})
+
+    </div>
+}
+
+else
+{
+    <div>
+        @Html.ActionLink("Назад", "TeacherPanel", "Teacher", new { result = "answers", questType = ViewBag.QuestType, id = ViewBag.Id }, new
+   {
+       @class = "btn btn-danger"
+   })
+
+    </div>
+}
+
